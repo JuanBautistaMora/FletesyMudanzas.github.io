@@ -4,6 +4,8 @@ const navToggle = document.querySelector(".nav-toggle");
 const navPanel = document.querySelector(".nav-panel");
 const navLinks = document.querySelectorAll(".nav-panel a");
 const revealItems = document.querySelectorAll(".reveal");
+const benefitsToggle = document.querySelector(".expand-toggle");
+const benefitsList = document.querySelector("#section-benefits-list");
 
 function setMenu(open) {
   document.body.classList.toggle("nav-open", open);
@@ -23,6 +25,14 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setMenu(false);
   }
+});
+
+benefitsToggle?.addEventListener("click", () => {
+  const expanded = benefitsToggle.getAttribute("aria-expanded") === "true";
+  benefitsToggle.setAttribute("aria-expanded", String(!expanded));
+  benefitsToggle.classList.toggle("is-open", !expanded);
+  benefitsToggle.textContent = expanded ? "Ver beneficios" : "Ocultar beneficios";
+  benefitsList?.classList.toggle("is-open", !expanded);
 });
 
 /* coverageMap initialization removed — widget inserted directly in index.html */

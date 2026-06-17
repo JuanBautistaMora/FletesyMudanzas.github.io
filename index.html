@@ -50,11 +50,11 @@
             <li><a href="#cobertura">Cobertura</a></li>
           </ul>
           <div class="nav-actions">
-            <a class="phone-link" href="tel:+541150410487" aria-label="Llamar al 11 5041 0487">
+            <a class="phone-link" href="tel:+5491161875396" aria-label="Llamar al 11 6187 5396">
               <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-              11 5041 0487
+              11 6187 5396
             </a>
-            <a class="btn btn-primary" href="https://wa.me/5491150410487?text=Hola%2C%20quiero%20solicitar%20un%20presupuesto%20para%20un%20flete%20o%20mudanza" target="_blank" rel="noopener">
+            <a class="btn btn-primary" href="https://wa.me/5491161875396?text=Hola%2C%20quiero%20solicitar%20un%20presupuesto%20para%20un%20flete%20o%20mudanza" target="_blank" rel="noopener">
               Solicitar Presupuesto
             </a>
           </div>
@@ -72,24 +72,20 @@
             <p class="hero-text">
               Mudanzas seguras, con muchos años en el rubro. No dudes en consultar tu presupuesto.
             </p>
-            <div class="trust-strip" aria-label="Beneficios destacados">
-              <span><svg aria-hidden="true"><use href="#icon-clock"></use></svg>Puntuales</span>
-              <span><svg aria-hidden="true"><use href="#icon-shield"></use></svg>Responsables</span>
-              <span><svg aria-hidden="true"><use href="#icon-route"></use></svg>CABA y GBA</span>
-            </div>
           </div>
 
         </div>
       </section>
 
-      <section class="section section-muted">
+      <section class="section section-muted benefits-section">
         <div class="container split-layout">
           <div class="section-heading align-left reveal">
             <p class="eyebrow">Por qué elegirnos</p>
             <h2>Un servicio pensado para que tu mudanza sea más simple</h2>
             <p>Respuesta rápida, planificación previa y trato cuidadoso en cada etapa del traslado.</p>
+            <button class="expand-toggle" type="button" aria-expanded="false" aria-controls="section-benefits-list">Ver beneficios</button>
           </div>
-          <div class="benefits-list">
+          <div class="benefits-list" id="section-benefits-list">
             <div class="benefit reveal"><svg aria-hidden="true"><use href="#icon-clock"></use></svg>Puntualidad garantizada.</div>
             <div class="benefit reveal"><svg aria-hidden="true"><use href="#icon-shield"></use></svg>Cuidado de pertenencias.</div>
             <div class="benefit reveal"><svg aria-hidden="true"><use href="#icon-user"></use></svg>Atención personalizada.</div>
@@ -109,8 +105,7 @@
           <div class="fleet-grid">
             <article class="fleet-card reveal">
               <div class="fleet-photo">
-                <svg aria-hidden="true"><use href="#icon-van"></use></svg>
-                <span>Foto Furgoneta</span>
+                <img src="./img/camioneta (5).jpeg" alt="Camioneta" />
               </div>
               <div class="fleet-content">
                 <h3>Furgoneta</h3>
@@ -119,8 +114,7 @@
             </article>
             <article class="fleet-card reveal">
               <div class="fleet-photo">
-                <svg aria-hidden="true"><use href="#icon-truck"></use></svg>
-                <span>Foto Pick up con caja mudancera</span>
+                <img src="./img/flete (2).jpeg" alt="Flete" />
               </div>
               <div class="fleet-content">
                 <h3>Pick up con caja mudancera</h3>
@@ -209,6 +203,7 @@
             }).addTo(_map);
 
             // Zonas
+            var _zonaLayers = [];
             [
               { name:'San Cristóbal (Base)', color:'#e63946', desc:'Sede central · Av. San Juan 2100',
                 coords:[[-34.615,-58.415],[-34.615,-58.397],[-34.629,-58.397],[-34.629,-58.415]] },
@@ -227,7 +222,40 @@
               poly.bindPopup('<b style="font-size:13px">'+z.name+'</b><br><span style="font-size:11px;color:#888">'+z.desc+'</span>');
               poly.on('mouseover', function(){ this.setStyle({fillOpacity:0.55}); });
               poly.on('mouseout',  function(){ this.setStyle({fillOpacity:0.30}); });
+              _zonaLayers.push(poly);
             });
+
+            // Límite (bounds) que engloba todas las zonas de cobertura
+            var _zonaBounds = L.featureGroup(_zonaLayers).getBounds();
+
+            // Animación de acercamiento: arranca mostrando Argentina entera
+            // y cuando el mapa entra en pantalla (scroll) hace zoom suave hacia las zonas
+            var _zoomYaHecho = false;
+            function _animarAcercamientoZonas(){
+              if (_zoomYaHecho) return;
+              _zoomYaHecho = true;
+              _map.flyToBounds(_zonaBounds, {
+                padding: [30, 30],
+                duration: 2.2,
+                easeLinearity: 0.2
+              });
+            }
+
+            var _mapaEl = document.getElementById('mapa-cobertura');
+            if ('IntersectionObserver' in window && _mapaEl) {
+              var _mapaObserver = new IntersectionObserver(function(entries){
+                entries.forEach(function(entry){
+                  if (entry.isIntersecting) {
+                    _animarAcercamientoZonas();
+                    _mapaObserver.disconnect();
+                  }
+                });
+              }, { threshold: 0.35 });
+              _mapaObserver.observe(_mapaEl);
+            } else {
+              // Navegadores muy viejos sin IntersectionObserver: hace el zoom directo
+              _animarAcercamientoZonas();
+            }
 
             // Marcador sede
             L.marker([-34.622,-58.405], {
@@ -259,8 +287,8 @@
           <p>San Juan 2100, Capital Federal. Efectivo, transferencia y Mercado Pago.</p>
         </div>
         <div class="footer-links">
-          <a href="https://wa.me/5491150410487" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="tel:+541150410487">Teléfono</a>
+          <a href="https://wa.me/5491161875396" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="tel:+5491161875396">Teléfono</a>
           <a href="#" aria-label="Instagram">Instagram</a>
           <a href="#" aria-label="Facebook">Facebook</a>
         </div>
@@ -271,7 +299,7 @@
       </div>
     </footer>
 
-    <a class="floating-whatsapp" href="https://wa.me/5491150410487?text=Hola%2C%20quiero%20solicitar%20un%20presupuesto%20para%20un%20flete%20o%20mudanza" target="_blank" rel="noopener" aria-label="Consultar por WhatsApp">
+    <a class="floating-whatsapp" href="https://wa.me/5491161875396?text=Hola%2C%20quiero%20solicitar%20un%20presupuesto%20para%20un%20flete%20o%20mudanza" target="_blank" rel="noopener" aria-label="Consultar por WhatsApp">
       <svg aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
     </a>
 

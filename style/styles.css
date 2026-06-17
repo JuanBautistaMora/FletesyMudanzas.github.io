@@ -539,25 +539,90 @@ h3 {
   stroke-width: 2;
 }
 
+.expand-toggle {
+  display: none;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border: 1px solid rgba(15, 39, 71, 0.16);
+  border-radius: calc(var(--radius) * 1.1);
+  background: var(--white);
+  color: var(--navy);
+  font-weight: 800;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 24px rgba(15, 39, 71, 0.08);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.expand-toggle:hover {
+  background: rgba(15, 39, 71, 0.04);
+}
+
+.expand-toggle::after {
+  content: "⯆";
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.expand-toggle.is-open::after {
+  transform: rotate(180deg);
+}
+
+.benefits-list {
+  transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
+}
+
+.benefits-list.is-open {
+  max-height: 2000px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .fleet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 22px;
+  align-items: stretch;
 }
 
 .fleet-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .fleet-photo {
+  display: flex;
+  flex-direction: column;
   min-height: 300px;
+  height: 300px;
   border-width: 0 0 1px;
   border-style: dashed;
   box-shadow: none;
+  overflow: hidden;
+}
+
+.fleet-photo img {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.fleet-photo span {
+  padding: 12px 0 0;
 }
 
 .fleet-content {
+  flex: 1;
   padding: 28px;
 }
 
@@ -838,6 +903,34 @@ h3 {
     min-height: 470px;
   }
 
+  .benefits-section {
+    border: 1px solid rgba(15, 39, 71, 0.09);
+    border-radius: calc(var(--radius) * 1.2);
+    background: rgba(255, 255, 255, 0.96);
+    padding: 24px 0 20px;
+  }
+
+  .section-heading {
+    margin-bottom: 16px;
+  }
+
+  .benefits-list {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .benefits-list.is-open {
+    max-height: 2000px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .expand-toggle {
+    display: inline-flex;
+  }
+
   .steps {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -925,6 +1018,10 @@ h3 {
   .fleet-grid,
   .benefits-list {
     grid-template-columns: 1fr;
+  }
+
+  .expand-toggle {
+    display: inline-flex;
   }
 
   .footer-grid,
